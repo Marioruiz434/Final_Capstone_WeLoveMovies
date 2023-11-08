@@ -11,7 +11,6 @@ async function movieExists(req, res, next) {
   }
   next({ status: 404, message: `Movie cannot be found.` });
 
-  next({});
 }
 
 async function read(req, res) {
@@ -50,7 +49,6 @@ async function listReviewsForMovie(req, res) {
     const reviews = await service.listReviewsForMovie(movieId);
     res.json({ data: reviews });
   } catch (error) {
-    // Handle errors and send an error response
     res.status(500).json({ error: "Internal server error" });
   }
 }

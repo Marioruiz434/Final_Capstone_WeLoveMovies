@@ -1,24 +1,24 @@
-const db = require("../db/connection");
+const knex = require("../db/connection");
 
-const tableName = "reviews";
 
-async function destroy(reviewId) {
-  // TODO: Write your code here
-  
+function destroy(reviewId) {
+  return knex("reviews").where({ reviewId }).del();
 }
 
 async function list(movie_id) {
-  // TODO: Write your code here
+  return knex("reviews as r")
+  .join("movies as m", "m.movie_id", "r.movie_id")
+  .select("r.*")
+  .where({ "m.movie_id": movie_id });
   
 }
 
-async function read(reviewId) {
-  // TODO: Write your code here
-  
+function read(reviewId) {
+  return knex("reviews").select("*").where({ reviewId }).first();
 }
 
 async function readCritic(critic_id) {
-  return db("critics").where({ critic_id }).first();
+  return knex("critics").where({ critic_id }).first();
 }
 
 async function setCritic(review) {
@@ -27,7 +27,7 @@ async function setCritic(review) {
 }
 
 async function update(review) {
-  return db(tableName)
+  return knex("reviews")
     .where({ review_id: review.review_id })
     .update(review, "*")
     .then(() => read(review.review_id))
