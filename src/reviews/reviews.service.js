@@ -5,7 +5,8 @@ function destroy(reviewId) {
   return knex("reviews").where({ reviewId }).del();
 }
 
-async function list(movie_id) {
+//function not required for tests
+function list(movie_id) {
   return knex("reviews as r")
   .join("movies as m", "m.movie_id", "r.movie_id")
   .select("r.*")
@@ -13,12 +14,13 @@ async function list(movie_id) {
   
 }
 
+//function not required for tests
 function read(reviewId) {
-  return knex("reviews").select("*").where({ reviewId }).first();
+  return knex("reviews").select("*").where({ review_id: reviewId }).first();
 }
 
-async function readCritic(critic_id) {
-  return knex("critics").where({ critic_id }).first();
+function readCritic(criticId) {
+  return knex("critics").select("*").where({ critic_id: criticId }).first();
 }
 
 async function setCritic(review) {
@@ -26,17 +28,18 @@ async function setCritic(review) {
   return review;
 }
 
-async function update(review) {
+function update(review) {
   return knex("reviews")
+    .select("*")
     .where({ review_id: review.review_id })
     .update(review, "*")
-    .then(() => read(review.review_id))
+    .then(()=> read(review.review_id))
     .then(setCritic);
+    
 }
 
 module.exports = {
   destroy,
-  list,
   read,
   update,
 };

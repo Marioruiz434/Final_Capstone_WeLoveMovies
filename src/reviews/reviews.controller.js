@@ -54,7 +54,6 @@ module.exports = {
   ],
   list: [hasMovieIdInPath, asyncErrorBoundary(list)],
   update: [
-    noMovieIdInPath,
     asyncErrorBoundary(reviewExists),
     asyncErrorBoundary(update),
   ],
