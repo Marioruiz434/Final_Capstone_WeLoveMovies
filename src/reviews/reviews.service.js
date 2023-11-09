@@ -2,10 +2,9 @@ const knex = require("../db/connection");
 
 
 function destroy(reviewId) {
-  return knex("reviews").where({ reviewId }).del();
+  return knex("reviews").where({ review_id: reviewId }).del();
 }
 
-//function not required for tests
 function list(movie_id) {
   return knex("reviews as r")
   .join("movies as m", "m.movie_id", "r.movie_id")
@@ -14,7 +13,6 @@ function list(movie_id) {
   
 }
 
-//function not required for tests
 function read(reviewId) {
   return knex("reviews").select("*").where({ review_id: reviewId }).first();
 }
@@ -40,6 +38,7 @@ function update(review) {
 
 module.exports = {
   destroy,
+  list,
   read,
   update,
 };

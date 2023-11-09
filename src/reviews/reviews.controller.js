@@ -3,7 +3,7 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const methodNotAllowed = require("../errors/methodNotAllowed");
 
 async function reviewExists(req, res, next) {
-  const review = await service.read(req.params.review_id)
+  const review = await service.read(req.params.reviewId)
   if (review) {
     res.locals.review = review;
     return next();
@@ -54,6 +54,7 @@ module.exports = {
   ],
   list: [hasMovieIdInPath, asyncErrorBoundary(list)],
   update: [
+    noMovieIdInPath,
     asyncErrorBoundary(reviewExists),
     asyncErrorBoundary(update),
   ],
