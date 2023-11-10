@@ -1,5 +1,18 @@
+//requires code outside of file for use
 const knex = require("../db/connection");
+const mapProperties = require("../utils/map-properties");
 
+//uses mapProperties in utils folder to create nested 'critic' object
+const addCritic = mapProperties({
+  critic_id: "critic.critic_id",
+  preferred_name: "critic.preferred_name",
+  surname: "critic.surname",
+  organization_name: "critic.organization_name",
+  created_at: "critic.created_at",
+  updated_at: "critic.updated_at"
+   });
+
+//queries movies that are showing in theaters
 async function list(is_showing) {
   return knex("movies")
     .select("movies.*")
@@ -17,11 +30,13 @@ async function list(is_showing) {
     });
 }
 
+//queries a single movie with 'movie_id'
 async function read(movie_id) {
   return knex("movies").select("*").where({ movie_id }).first();
   
 }
 
+//queries all theaters where single movie is showing
 async function listTheatersForMovie(movieId) {
   return knex("theaters")
     .select("theaters.*")
@@ -29,27 +44,16 @@ async function listTheatersForMovie(movieId) {
     .where({ "movies_theaters.movie_id": movieId });
 }
 
+//queries all reviews for a single movie
 async function listReviewsForMovie(movieId) {
   return knex("reviews as r")
-    .select(
-      "r.review_id",
-      "r.content",
-      "r.score",
-      "r.created_at",
-      "r.updated_at",
-      "r.critic_id",
-      "r.movie_id",
-      "c.critic_id as critic.critic_id",
-      "c.preferred_name",
-      "c.surname",
-      "c.organization_name",
-      "c.created_at as critic.created_at",
-      "c.updated_at as critic.updated_at"
-    )
-    .join("critics as c", "r.critic_id", "c.critic_id")
-    .where({ "r.movie_id": movieId });
+  .join("critics as c", "r.critic_id", "c.critic_id")
+    .select("r.*", "c.*")
+    .where({ "r.movie_id": movieId })
+    .then((reviews) => reviews.map(addCritic));;
 }
 
+//exports functions for use in 'movies.controller.js'
 module.exports = {
   list,
   read,

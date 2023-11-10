@@ -1,6 +1,8 @@
+//requires code outside of file for use
 const knex = require("../db/connection");
 const reduceProperties = require("../utils/reduce-properties");
 
+//a function that accepts an array and when called returns an array with one element for each unique field value.
 const reduceMovies = reduceProperties("theater_id", {
   movie_id: ["movies", null, "movie_id"],
   title: ["movies", null, "title"],
@@ -10,6 +12,7 @@ const reduceMovies = reduceProperties("theater_id", {
   image_url: ["movies", null, "image_url"],
 });
 
+//quesries list of all theaters then passes higher order function
 async function list() {
   return knex("theaters")
     .join(
@@ -21,6 +24,7 @@ async function list() {
     .then(reduceMovies);
 }
 
+//exports function for use in 'theaters.controller.js'
 module.exports = {
   list,
 };

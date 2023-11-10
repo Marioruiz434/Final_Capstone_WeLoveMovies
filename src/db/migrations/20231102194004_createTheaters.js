@@ -1,4 +1,4 @@
-
+//creates "theaters" table
 exports.up = function(knex) {
     return knex.schema.createTable("theaters", (table) => {
         table.increments("theater_id");
@@ -11,7 +11,7 @@ exports.up = function(knex) {
         table.timestamps(true, true);
       });
 };
-
+//rolls back migration
 exports.down = function(knex) {
     return knex.schema.dropTable("theaters");
 };

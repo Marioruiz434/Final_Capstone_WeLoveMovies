@@ -1,4 +1,4 @@
-
+//creates "reviews" table
 exports.up = function(knex) {
     return knex.schema.createTable("reviews", (table) => {
         table.increments("review_id");
@@ -13,7 +13,7 @@ exports.up = function(knex) {
         table.foreign("movie_id").references("movie_id").inTable("movies");
       });
 };
-
+//rolls back migration
 exports.down = function(knex) {
     return knex.schema.dropTable("reviews");
 };

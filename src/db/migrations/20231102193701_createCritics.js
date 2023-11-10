@@ -1,6 +1,5 @@
-
+//creates "critics" table
 exports.up = function(knex) {
-  
     return knex.schema.createTable("critics", (table) => {
         table.increments("critic_id");
         table.string("preferred_name");
@@ -10,6 +9,7 @@ exports.up = function(knex) {
       });
 };
 
+//rolls back migration
 exports.down = function(knex) {
     return knex.schema.dropTable("critics");
 };
